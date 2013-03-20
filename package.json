@@ -17,5 +17,12 @@
   "dependencies": {
     "outcome": "0.0.x",
     "verify": "0.0.x"
+  },
+  "devDependencies": {
+    "mocha": "1.8.x",
+    "expect.js": "0.2.x"
+  },
+  "scripts": {
+    "test": "mocha . --reporter min"
   }
 }
