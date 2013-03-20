@@ -12,13 +12,13 @@ personSchema = new Schema
 
 
   phoneNumber: {
-    type: "string",
-    required: true
+    $type: "string",
+    $required: true
   },
 
   createdAt: {
-    type: "date",
-    default: Date.now
+    $type: "date",
+    $default: Date.now
   }
 
 
