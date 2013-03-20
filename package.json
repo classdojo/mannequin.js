@@ -1,0 +1,21 @@
+{
+  "name": "mannequin",
+  "version": "0.0.0",
+  "description": "mannequin.js ============",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/classdojo/mannequin.js.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "8932fdf3fafd60ee928d5ab3344620e5da44022e",
+  "dependencies": {
+    "outcome": "0.0.x",
+    "verify": "0.0.x"
+  }
+}
