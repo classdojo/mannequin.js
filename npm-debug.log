@@ -1,0 +1,31 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'adduser',
+1 verbose cli   '-u',
+1 verbose cli   'architected',
+1 verbose cli   '-p',
+1 verbose cli   'padssword' ]
+2 info using npm@1.2.11
+3 info using node@v0.8.22
+4 verbose node symlink /usr/local/bin/node
+5 error Error: canceled
+5 error     at Interface.<anonymous> (/usr/local/n/versions/0.8.20/lib/node_modules/npm/node_modules/read/lib/read.js:65:13)
+5 error     at Interface.EventEmitter.emit (events.js:126:20)
+5 error     at Interface._ttyWrite (readline.js:607:16)
+5 error     at ReadStream.onkeypress (readline.js:97:10)
+5 error     at ReadStream.EventEmitter.emit (events.js:126:20)
+5 error     at emitKey (readline.js:1058:12)
+5 error     at ReadStream.onData (readline.js:807:7)
+5 error     at ReadStream.EventEmitter.emit (events.js:96:17)
+5 error     at TTY.onread (net.js:397:14)
+6 error If you need help, you may report this log at:
+6 error     <http://github.com/isaacs/npm/issues>
+6 error or email it to:
+6 error     <npm-@googlegroups.com>
+7 error System Darwin 12.3.0
+8 error command "/usr/local/bin/node" "/usr/local/bin/npm" "adduser" "-u" "architected" "-p" "padssword"
+9 error cwd /Users/craig/Developer/Public/mannequin.js
+10 error node -v v0.8.22
+11 error npm -v 1.2.11
+12 verbose exit [ 1, true ]
