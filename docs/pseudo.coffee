@@ -54,8 +54,8 @@ person = new Person({
 });
 
 
-person.validate(function(error) {
+person.validate (error) ->
   console.log(error); //phone number must be present
-});
+
 
 
