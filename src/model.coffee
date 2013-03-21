@@ -13,5 +13,6 @@ module.exports = class Model extends Bindable
   ###
 
   validate: (callback) ->
+    return callback() if not @schema
     @schema.test @data, callback
 

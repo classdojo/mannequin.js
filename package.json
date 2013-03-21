@@ -1,6 +1,6 @@
 {
   "name": "mannequin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "mannequin.js ============",
   "main": "./lib/index.js",
   "scripts": {
