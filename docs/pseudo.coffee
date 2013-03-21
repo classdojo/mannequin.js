@@ -3,13 +3,20 @@
  Schema definition
 ###
 
+hobbySchema = new Schema
+
+  name: "string",
+  type: "string"
+
+
+
+
 personSchema = new Schema
   
   name: {
     first: "string",
     last: "string"
   },
-
 
   phoneNumber: {
     $type: "string",
@@ -19,7 +26,9 @@ personSchema = new Schema
   createdAt: {
     $type: "date",
     $default: Date.now
-  }
+  },
+
+  hobbies: [hobbySchema]
 
 
 ###

@@ -4,7 +4,7 @@
   "description": "mannequin.js ============",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha . --reporter min"
   },
   "repository": {
     "type": "git",
@@ -16,13 +16,14 @@
   "gitHead": "8932fdf3fafd60ee928d5ab3344620e5da44022e",
   "dependencies": {
     "outcome": "0.0.x",
-    "verify": "0.0.x"
+    "verify": "0.0.x",
+    "dref": "0.0.x",
+    "async": "0.2.x",
+    "underscore": "1.4.x"
   },
   "devDependencies": {
     "mocha": "1.8.x",
-    "expect.js": "0.2.x"
-  },
-  "scripts": {
-    "test": "mocha . --reporter min"
+    "expect.js": "0.2.x",
+    "structr": "0.2.x"
   }
 }
