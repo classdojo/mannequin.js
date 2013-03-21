@@ -1,13 +1,13 @@
 _ = require("underscore")
+Bindable = require("bindable")
 
-module.exports = class Model
+module.exports = class Model extends Bindable
 
   ###
   ###
 
   constructor: (@data, options = {}) ->
     _.extend @, options
-
 
   ###
   ###

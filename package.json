@@ -19,7 +19,9 @@
     "verify": "0.0.x",
     "dref": "0.0.x",
     "async": "0.2.x",
-    "underscore": "1.4.x"
+    "underscore": "1.4.x",
+    "toarray": "0.0.x",
+    "bindable": "0.1.x"
   },
   "devDependencies": {
     "mocha": "1.8.x",
