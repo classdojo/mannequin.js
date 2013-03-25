@@ -11,6 +11,9 @@ hobbySchema = new Schema
 
 
 
+
+
+
 personSchema = new Schema
   
   name: {
@@ -28,27 +31,24 @@ personSchema = new Schema
     $default: Date.now
   },
 
-  hobbies: [hobbySchema]
-
-
-###
- person definition
-###
-
-class Person extends Model
-
-
-  ###
-  ###
-
-  schema: personSchema
+  hobbies: ["hobbies"]
 
 
 
 
-Person.pre "save", (next) ->
-  remote.save(this, next)
 
+dictionary = new Dictionary();
+
+dictionary.register("hobbies", hobbySchema)
+dictionary.register("people", personSchema)
+
+PersonModel = dictionary.getModelClass("people")
+HobbyModel = dictionary.getModelClass("hobbies")
+
+
+PersonModel.pre("save", (next) ->
+
+)
 
 
 ###

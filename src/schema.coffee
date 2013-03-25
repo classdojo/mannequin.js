@@ -26,6 +26,33 @@ module.exports = class Schema
 
 
   ###
+  ###
+
+  refs: () ->
+
+    refs = []
+    for def in @definitions
+      if def.options.$ref
+        refs.push def
+
+    refs
+
+  ### 
+   Clones the schema. Necessary for the dictionary
+  ###
+
+  clone: () -> new Schema @definition, @options
+
+  ### 
+   Stores information about all registered schemas
+  ###
+
+  dictionary: (value) ->
+    return @_dictionary if not arguments.length
+    @_dictionary = value
+    @
+
+  ###
    synonym for test
   ###
 

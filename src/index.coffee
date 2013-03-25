@@ -1,2 +1,3 @@
-exports.Schema = require "./schema"
-exports.Model  = require "./model"
+
+exports.Schema     = require "./schema"
+exports.dictionary = require "./dictionary"

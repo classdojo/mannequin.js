@@ -12,8 +12,14 @@ class PropertyDefinition
   ###
   ###
 
-  constructor: (@schema, @key, definition) ->
-    @definition = @_fixDefnition definition
+  constructor: (@schema, key, options) ->
+
+    keyParts = key.split(" ")
+    @key = keyParts.pop()
+    @scope = keyParts.pop() or "private"
+
+
+    @options = @_fixDefnition options
 
     # make sure the definition is OK
     @_validateDefinition()
@@ -29,16 +35,16 @@ class PropertyDefinition
 
     v = dref.get(target, @key) or @_default()
 
-    if not v and @definition.$required
-        return callback new Error "\"#{@key}\" must be present"
 
+    if not v and @options.$required
+        return callback new Error "\"#{@key}\" must be present"
 
 
     async.forEach @_testers, ((tester, next) ->
       tester v, next
     ), (err) =>
       if err 
-        return callback new Error @definition.message or "\"#{@key}\" is invalid"
+        return callback new Error @options.message or "\"#{@key}\" is invalid"
 
       dref.set target, @key, v
 
@@ -68,7 +74,7 @@ class PropertyDefinition
 
   _validateDefinition: () ->
 
-    if not @definition.$type
+    if not @options.$type and not @options.$ref
       throw new Error "definition type must exist for #{@key}"
 
 
@@ -79,21 +85,16 @@ class PropertyDefinition
 
     testers = []
 
-    if @definition.$multi
+    if @options.$multi
       testers.push verify.tester().is("array")
 
 
-    # type is a schema? 
-    if utils.isSchema @definition.$type
-      testers.push @_multi @definition.$type
+    if @options.$ref
+      testers.push @_multi (item, next) =>
+        @schema.dictionary().getSchema(@options.$ref).test item, next
 
-    # type is a string?
-    else
+    if @options.$type
       testers.push @_multi @_generateTypeTester()
-
-    # is a tester provided?
-    if @definition.$test
-      testers.push @_multi @definition.$test
 
     @_testers = testers
 
@@ -102,15 +103,16 @@ class PropertyDefinition
   ###
 
   _generateTypeTester: () ->
-    tester = verify.tester().is(@definition.$type)
 
-    return null if @definition.$test
+    return @options.$test if @options.$test
+
+    tester = verify.tester().is(@options.$type)
 
     # checks for stuff like { $type: "string", $is: /regexp/ }
-    for key of @definition
+    for key of @options
       k = key.substr(1)
       if !!tester[k]
-        tester[k].apply tester, toarray @definition[key]
+        tester[k].apply tester, toarray @options[key]
 
     tester
 
@@ -129,9 +131,16 @@ class PropertyDefinition
   ###
 
   _default: () ->
-    return undefined if not @definition.$default
-    return @definition.$default() if typeof @definition.$default is "function"
-    return @definition.$default
+    return undefined if not @options.$default
+    return @options.$default() if typeof @options.$default is "function"
+    return @options.$default
+
+
+  ###
+  ###
+
+  _getSchema: (value) ->
+    return @schema.dictionary()?.getSchema value
 
   ###
   ###

@@ -1,6 +1,6 @@
 {
   "name": "mannequin",
-  "version": "0.0.3",
+  "version": "0.1.1",
   "description": "mannequin.js ============",
   "main": "./lib/index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "async": "0.2.x",
     "underscore": "1.4.x",
     "toarray": "0.0.x",
-    "bindable": "0.1.x"
+    "bindable": "0.2.x"
   },
   "devDependencies": {
     "mocha": "1.8.x",
