@@ -1,5 +1,6 @@
 
 var Schema = require("../../").Schema,
+bindable = require("bindable"),
 dictionary = require("../../").dictionary();
 
 var locationSchema = new Schema({
@@ -49,6 +50,12 @@ exports.PersonModel.builder.virtual("fullName").get(function() {
 exports.HobbyModel.builder.virtual("test").get(function() {
   return this.get("name");
 });
+
+exports.HobbyModel.builder.createCollection = function() {
+  col = new bindable.Collection();
+  col.customCollection = true;
+  return col;
+}
 
 exports.PersonModel.builder.pre("save", function(next) {
   this.set("saveCount", 1);

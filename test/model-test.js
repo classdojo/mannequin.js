@@ -48,6 +48,11 @@ describe("models", function() {
     expect(person.get("hobbies").at).not.to.be(undefined);
   });
 
+  it("hobbies should be custom collection", function() {
+    expect(person.get("hobbies").customCollection).to.be(true);
+  });
+
+
   it("first item in hobbies should be a hobby", function() {
     expect(person.get("hobbies").at(0).constructor).to.be(HobbyModel)
   });
