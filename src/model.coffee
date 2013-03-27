@@ -87,7 +87,7 @@ module.exports = class Model extends bindable.Object
   ###
 
   _createCollection: () ->
-    @builder.createCollection(@)
+    @builder.createCollection @
 
 
 

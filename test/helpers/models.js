@@ -51,8 +51,8 @@ exports.HobbyModel.builder.virtual("test").get(function() {
   return this.get("name");
 });
 
-exports.HobbyModel.builder.createCollection = function() {
-  col = new bindable.Collection();
+exports.PersonModel.builder.createCollection = function() {
+  var col = new bindable.Collection();
   col.customCollection = true;
   return col;
 }
