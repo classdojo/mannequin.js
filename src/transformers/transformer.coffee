@@ -1,14 +1,12 @@
-__getClass = (object) ->
-  return Object.prototype.toString.call(object)
-    .match(/^\[object\s(.*)\]$/)[1];
-
+hoist = require "hoist"
 
 module.exports = class
 
   ###
   ###
 
-  constructor: (@_transformers, @key, @_transform) ->
+  constructor: (@_transformers, @key) ->
+    @_hoister = hoist()
 
   ###
   ###
@@ -22,12 +20,13 @@ module.exports = class
   ###
 
   cast: (clazz) ->
-    @_transform = (value) =>
-      return @_defaultValue if not value
-      return value if value.constructor is clazz
-      return new clazz(value)
-    @
+    @_hoister.cast clazz
 
+  ###
+  ###
+
+  map: (mapper) ->
+    @_hoister.map mapper
 
   ###
   ###
@@ -36,13 +35,8 @@ module.exports = class
     m = @_transformers.model
     m.set @key, @set m.get @key
 
-
   ###
   ###
 
   set: (value) -> 
-    @_transform value or @_defaultValue
-
-
-
-
+    @_hoister value or @_defaultValue

@@ -3,6 +3,8 @@ toarray = require "toarray"
 async = require "async"
 step = require "stepc"
 Model = require "./model"
+bindable = require "bindable"
+outcome = require "outcome"
 
 
 class Virtual
@@ -32,7 +34,7 @@ class Virtual
     if arguments.length is 1 
       return @_get.call context
     else
-      return @_set.apply context, value
+      return @_set.call context, value
 
     @
 
@@ -56,16 +58,22 @@ module.exports = class ModelBuilder
   ###
 
   constructor: (@dictionary, @name, @schema) ->
+    @_virtuals = {}
+    @_pre = {}
+    @_post = {}
+
+    @properties = @methods = @getClass().prototype
+    @statics = @getClass()
 
   ###
   ###
 
-  pre: (keys, callback) -> @_registerPrePost "pre", keys, callback
+  pre: (keys, callback) -> @_registerPrePost @_pre, keys, callback
 
   ###
   ###
 
-  post: (key, callback) -> @_registerPrePost "post", keys,  callback
+  post: (keys, callback) -> @_registerPrePost @_post, keys,  callback
 
   ###
    registers static vars
@@ -85,7 +93,14 @@ module.exports = class ModelBuilder
   ###
 
   virtual: (key) ->
-    @getClass()._virtual[key] or (@getClass()._virtual[key] = new Virtual(key))
+    @_virtuals[key] or (@_virtuals[key] = new Virtual(key))
+
+
+  ###
+  ###
+
+  createCollection: (item) ->
+    new bindable.Collection()
 
   ###
   ###
@@ -94,21 +109,20 @@ module.exports = class ModelBuilder
     if @_class
       return @_class
 
-
-
     clazz = @_class = () ->
       clazz.__super__.constructor.apply(this, arguments);
 
 
-    @_class.prototype = _.extend({}, Model.prototype)
-    @_class.prototype.schema   = @schema
+    @_class.prototype             = _.extend({}, Model.prototype)
+    @_class.prototype.schema      = @schema
     @_class.prototype.constructor = clazz
-    @_class.__super__ = Model.prototype
-    @_class.prototype.builder  = @
+    @_class.__super__             = Model.prototype
+    @_class.prototype.builder     = @
     @_class.prototype.dictionary  = @dictionary
-    @_class.prototype._pre     = {}
-    @_class.prototype._post    = {}
-    @_class.prototype._virtual = {}
+    @_class.prototype._pre        = @_pre
+    @_class.prototype._post       = @_post
+    @_class.prototype._virtual    = @_virtuals
+    @_class.builder = @
     @_class
 
   ###
@@ -116,28 +130,31 @@ module.exports = class ModelBuilder
 
   _registerPrePost: (pp, keys, callback) ->
     for key in toarray(keys)
-      stack = @_prePost(pp, key).push callback
+      @_prePost(pp, key).push callback
+    @
 
   ###
   ###
 
   _prePost: (pp, key) ->
-    return @_class.prototype[pp]?[key] if @_class.prototype[pp]?[key]
+    return pp[key] if pp[key]
 
-    @_class.prototype._pre[key]  = []
-    @_class.prototype._post[key] = []
+    @_pre[key]  = []
+    @_post[key] = []
 
+    original = @_class.prototype[key]
 
-    original = @_class.prototye[pp]
+    pre = @_pre[key]
+    post = @_post[key]
 
-    @_class.prototype[pp] = (next) ->
+    @_class.prototype[key] = (next) ->
       o = outcome.e next
 
       self = @
 
       # pre
       step.async (() ->
-        async.eachSeries self._pre, ((fn, next) ->
+        async.eachSeries pre, ((fn, next) ->
           fn.call self, next
         ), @
       ),
@@ -145,12 +162,12 @@ module.exports = class ModelBuilder
       # original
       (o.s () ->
         return @() if not original
-        original.call @
+        original.call self, @
       ), 
 
       # post
       (o.s () ->
-        async.eachSeries self._post, ((fn, next) ->
+        async.eachSeries post, ((fn, next) ->
           fn.call self, next
         ), @
       ), 

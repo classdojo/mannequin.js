@@ -1,6 +1,7 @@
 _ = require("underscore")
 bindable = require("bindable")
 Transformers = require("./transformers")
+isa = require "isa"
 
 module.exports = class Model extends bindable.Object
 
@@ -8,8 +9,10 @@ module.exports = class Model extends bindable.Object
   ###
 
   constructor: (@data = {}, options = {}) ->
+
     super @data
     _.extend @, options
+
     @init()
 
   ###
@@ -17,7 +20,21 @@ module.exports = class Model extends bindable.Object
 
   init: () ->
     for def in @schema.refs()
-      @transform(def.key).cast(@dictionary.modelBuilder(def.options.$ref).getClass()).reset()
+
+      refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
+      transformer = @transform(def.key)
+
+      if def.options.$multi
+        transformer.map((source) =>
+          col = @_createCollection()
+          col.transform().cast(refClass)
+          col.reset source
+        )
+        @_set def.key, @get(def.key) or []
+      else
+        transformer.cast(refClass)
+
+      transformer.reset()
 
   ###
   ###
@@ -30,7 +47,6 @@ module.exports = class Model extends bindable.Object
   validate: (callback) ->
     return callback() if not @schema
     @schema.test @, callback
-
 
   ###
   ###
@@ -66,6 +82,12 @@ module.exports = class Model extends bindable.Object
 
   _transformer: () ->
     @__transformer || (@__transformer = new Transformers(@))
+
+  ###
+  ###
+
+  _createCollection: () ->
+    @builder.createCollection(@)
 
 
 

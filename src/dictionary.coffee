@@ -42,6 +42,4 @@ module.export = class Dictionary extends EventEmitter
     modelBuilder
 
 
-
-
 module.exports = () -> new Dictionary()

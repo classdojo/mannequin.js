@@ -23,12 +23,7 @@ module.exports = class extends Bindable.EventEmitter
   ###
   ###
 
-  use: (key, transformer) -> 
-
-    if arguments.length is 1
-      transformer = key 
-      key = undefined
-
+  use: (key) -> 
 
     if not key
       event = "**"
@@ -38,7 +33,7 @@ module.exports = class extends Bindable.EventEmitter
       # start from the ROOT property
       event = "#{keyParts.shift()}.**"
 
-    transformer = new Transformer @, key, transformer
+    transformer = new Transformer @, key
 
 
     @on event, (target) => 

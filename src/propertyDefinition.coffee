@@ -3,6 +3,7 @@ utils  = require "./utils"
 verify = require("verify")()
 async  = require "async"
 toarray = require "toarray"
+isa  = require "isa"
 
 ###
 ###
@@ -35,6 +36,8 @@ class PropertyDefinition
 
     v = dref.get(target, @key) or @_default()
 
+    if v and v.source
+      v = v.source()
 
     if not v and @options.$required
         return callback new Error "\"#{@key}\" must be present"
@@ -43,6 +46,7 @@ class PropertyDefinition
     async.forEach @_testers, ((tester, next) ->
       tester v, next
     ), (err) =>
+
       if err 
         return callback new Error @options.message or "\"#{@key}\" is invalid"
 
@@ -56,15 +60,16 @@ class PropertyDefinition
 
   _fixDefnition: (definition) ->
 
-    if typeof definition is "string" or utils.firstKey(definition).substr(0, 1) isnt "$"
+
+    if typeof definition is "string" and utils.firstKey(definition).substr(0, 1) isnt "$"
       return {
         $type: definition
       }
-    else if definition instanceof Array
-      return {
-        $type: definition[0],
-        $multi: true
-      }
+    else if isa.array definition
+      def = @_fixDefnition definition[0]
+      def.$multi = true
+      def.$default = () -> []
+      return def
     else 
       return definition
 
@@ -85,14 +90,16 @@ class PropertyDefinition
 
     testers = []
 
-    if @options.$multi
-      testers.push verify.tester().is("array")
+    #if @options.$multi
+    #  testers.push verify.tester().is (item) ->
+    #    console.log item
+
 
 
     if @options.$ref
       testers.push @_multi (item, next) =>
         @schema.dictionary().getSchema(@options.$ref).test item, next
-
+    else
     if @options.$type
       testers.push @_multi @_generateTypeTester()
 
@@ -155,7 +162,6 @@ class PropertyDefinition
     else if target.test
       test = target.test
       context = target
-
 
     (value, next) ->
       if test.length is 1
