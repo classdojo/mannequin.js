@@ -64,6 +64,7 @@ module.exports = class ModelBuilder
 
     @properties = @methods = @getClass().prototype
     @statics = @getClass()
+    @_setupMethods()
 
   ###
   ###
@@ -132,6 +133,13 @@ module.exports = class ModelBuilder
     for key in toarray(keys)
       @_prePost(pp, key).push callback
     @
+
+  ###
+  ###
+
+  _setupMethods: () ->
+    @methods.model = (name) =>
+      @dictionary.modelBuilder(name).getClass()
 
   ###
   ###

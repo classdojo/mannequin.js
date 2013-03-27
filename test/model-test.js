@@ -104,4 +104,8 @@ describe("models", function() {
       next();
     });
   });
+
+  it("person can find a hobby model", function() {
+    expect(person.model("hobby")).not.to.be(undefined);
+  });
 });
