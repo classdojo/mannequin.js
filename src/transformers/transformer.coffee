@@ -20,13 +20,15 @@ module.exports = class
   ###
 
   cast: (clazz) ->
-    @_hoister.cast clazz
+    @_hoister = @_hoister.cast clazz
+    @
 
   ###
   ###
 
   map: (mapper) ->
-    @_hoister.map mapper
+    @_hoister = @_hoister.map mapper
+    @
 
   ###
   ###
