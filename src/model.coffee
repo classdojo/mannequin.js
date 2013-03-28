@@ -28,10 +28,10 @@ module.exports = class Model extends bindable.Object
         transformer.map((source) =>
           col = @_createCollection()
           
-          col.item = @
+          col.parent = @
 
           col.transform().cast(refClass).map (item) ->
-            item.collection = col
+            item.parent = col
             item
 
           col.reset source
