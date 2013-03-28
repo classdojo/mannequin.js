@@ -27,7 +27,13 @@ module.exports = class Model extends bindable.Object
       if def.options.$multi
         transformer.map((source) =>
           col = @_createCollection()
-          col.transform().cast(refClass)
+          
+          col.item = @
+
+          col.transform().cast(refClass).map (item) ->
+            item.collection = col
+            item
+
           col.reset source
         )
         @_set def.key, @get(def.key) or []

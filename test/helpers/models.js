@@ -33,7 +33,6 @@ var personSchema = new Schema({
 });
 
 
-
 exports.LocationModel = dictionary.register("location", locationSchema).getClass();
 exports.HobbyModel    = dictionary.register("hobby", hobbySchema).getClass();
 exports.PersonModel   = dictionary.register("person", personSchema).getClass();

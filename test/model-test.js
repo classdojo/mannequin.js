@@ -48,6 +48,14 @@ describe("models", function() {
     expect(person.get("hobbies").at).not.to.be(undefined);
   });
 
+  it("hobbies collection shoud have ref to the person item", function() {
+    expect(person.get("hobbies").item).to.be(person);
+  });
+
+  it("each hobby item should have a reference to the hobbies collection", function() {
+    expect(person.get("hobbies").at(0).collection).to.be(person.get("hobbies"));
+  });
+
   it("hobbies should be custom collection", function() {
     expect(person.get("hobbies").customCollection).to.be(true);
   });

@@ -22,7 +22,7 @@ module.export = class Dictionary extends EventEmitter
   register: (name, schema) ->
     @_schemas[name] = schema = if utils.isSchema(schema) then schema.clone() else new Schema(schema)
     schema.dictionary @
-    return @modelBuilder name
+    return schema.modelBuilder = @modelBuilder name
 
   ###
   ###

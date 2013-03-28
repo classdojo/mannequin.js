@@ -45,7 +45,6 @@ class Virtual
   get: (@_get) -> @
 
 
-
   ###
   ###
 
