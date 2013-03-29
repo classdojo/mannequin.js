@@ -19,14 +19,14 @@ module.exports = class Model extends bindable.Object
   ###
 
   init: () ->
-    for def in @schema.refs()
+    for def in @schema.refs() then do (def) =>
 
       refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
       transformer = @transform(def.key)
 
       if def.options.$multi
         transformer.map((source) =>
-          col = @_createCollection()
+          col = @_createCollection def.key
           
           col.parent = @
 
@@ -92,8 +92,8 @@ module.exports = class Model extends bindable.Object
   ###
   ###
 
-  _createCollection: () ->
-    @builder.createCollection @
+  _createCollection: (key) ->
+    @builder.createCollection @, key
 
 
 

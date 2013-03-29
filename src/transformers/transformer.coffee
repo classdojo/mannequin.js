@@ -6,7 +6,7 @@ module.exports = class
   ###
 
   constructor: (@_transformers, @key) ->
-    @_hoister = hoist()
+    @resetHoist()
 
   ###
   ###
@@ -22,6 +22,12 @@ module.exports = class
   cast: (clazz) ->
     @_hoister = @_hoister.cast clazz
     @
+
+  ###
+  ###
+
+  resetHoist: () ->
+    @_hoister = hoist()
 
   ###
   ###
