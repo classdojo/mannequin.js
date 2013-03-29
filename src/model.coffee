@@ -26,7 +26,7 @@ module.exports = class Model extends bindable.Object
 
       if def.options.$multi
         transformer.map((source) =>
-          col = @_createCollection def.key
+          col = @_createCollection def
           
           col.parent = @
 
@@ -92,8 +92,8 @@ module.exports = class Model extends bindable.Object
   ###
   ###
 
-  _createCollection: (key) ->
-    @builder.createCollection @, key
+  _createCollection: (definition) ->
+    @builder.createCollection @, definition
 
 
 
