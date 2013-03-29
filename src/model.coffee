@@ -8,9 +8,8 @@ module.exports = class Model extends bindable.Object
   ###
   ###
 
-  constructor: (@data = {}, options = {}) ->
-
-    super @data
+  constructor: (data = {}, options = {}) ->
+    super data
     _.extend @, options
 
     @init()

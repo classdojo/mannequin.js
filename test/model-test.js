@@ -71,7 +71,7 @@ describe("models", function() {
   });
 
   it("when resetting the hobbies, they're type-casted as a collection", function() {
-    person.set("hobbies", [{name:"blah"}]);
+    person.set("hobbies", [{_id:"blah", name:"blah"}]);
     expect(person.get("hobbies").at).not.to.be(undefined);
   });
 

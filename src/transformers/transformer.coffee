@@ -32,7 +32,7 @@ module.exports = class
   ###
   ###
 
-  map: (mapper) ->
+  map: (mapper) -> 
     @_hoister = @_hoister.map mapper
     @
 

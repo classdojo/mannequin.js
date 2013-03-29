@@ -53,6 +53,10 @@ exports.HobbyModel.builder.virtual("test").get(function() {
 exports.PersonModel.builder.createCollection = function() {
   var col = new bindable.Collection();
   col.customCollection = true;
+  col.transform().map(function(item) {
+    col.mapped = true;
+    return item;
+  })
   return col;
 }
 
