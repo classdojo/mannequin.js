@@ -18,28 +18,8 @@ module.exports = class Model extends bindable.Object
   ###
 
   init: () ->
-    for def in @schema.refs() then do (def) =>
-
-      refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
-      transformer = @transform(def.key)
-
-      if def.options.$multi
-        transformer.map((source) =>
-          col = @_createCollection def
-          
-          col.parent = @
-
-          col.transform().cast(refClass).map (item) ->
-            item.parent = col
-            item
-
-          col.reset source
-        )
-        @_set def.key, @get(def.key) or []
-      else
-        transformer.cast(refClass)
-
-      transformer.reset()
+    @builder.initModel @
+    
 
   ###
   ###
@@ -87,13 +67,6 @@ module.exports = class Model extends bindable.Object
 
   _transformer: () ->
     @__transformer || (@__transformer = new Transformers(@))
-
-  ###
-  ###
-
-  _createCollection: (definition) ->
-    @builder.createCollection @, definition
-
 
 
 

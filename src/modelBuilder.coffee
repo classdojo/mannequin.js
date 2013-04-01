@@ -95,6 +95,58 @@ module.exports = class ModelBuilder
   virtual: (key) ->
     @_virtuals[key] or (@_virtuals[key] = new Virtual(key))
 
+  ###
+  ###
+
+  initModel: (model) ->
+    @_initPropertyTransformation model, def for def in @schema.refs()
+
+
+  ###
+  ###
+
+  _initPropertyTransformation: (model, def) ->
+    transformer = model.transform def.key
+
+    if def.options.$multi
+      @_initCollectionTransformation model, transformer, def
+    else
+      @_initModelTransformation model, transformer, def
+
+    transformer.reset()
+
+  ###
+  ###
+
+  _initCollectionTransformation: (model, transformer, def) ->
+      refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
+
+      transformer.map((source) =>
+        col = @createCollection def
+        
+        col.parent = model
+
+        col.transform().cast(refClass).map (item) ->
+          item.parent = col
+          item.definition = def
+          item
+
+        col.reset source
+      )
+
+      if not model.get(def.key)
+        @_set def.key, []
+
+  ###
+  ###
+
+  _initModelTransformation: (model, transformer, def) ->
+    refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
+    transformer.cast(refClass).map((model) ->
+      model.ownerDefinition = def
+      model
+    )
+
 
   ###
   ###
