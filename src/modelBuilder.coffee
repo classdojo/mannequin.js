@@ -138,7 +138,7 @@ module.exports = class ModelBuilder extends EventEmitter
       )
 
       if not model.get(def.key)
-        @_set def.key, []
+        model._set def.key, []
 
   ###
   ###
