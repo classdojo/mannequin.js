@@ -146,7 +146,7 @@ module.exports = class ModelBuilder extends EventEmitter
   _initModelTransformation: (model, transformer, def) ->
     refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
     transformer.cast(refClass).map((model) ->
-      model.ownerDefinition = def
+      model.definition = def
       model
     )
 
