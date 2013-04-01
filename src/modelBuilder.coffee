@@ -125,7 +125,7 @@ module.exports = class ModelBuilder extends EventEmitter
       refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
 
       transformer.map((source) =>
-        col = @createCollection def
+        col = @createCollection model, def
         
         col.parent = model
 
