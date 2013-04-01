@@ -5,6 +5,7 @@ step = require "stepc"
 Model = require "./model"
 bindable = require "bindable"
 outcome = require "outcome"
+EventEmitter = require("events").EventEmitter
 
 
 class Virtual
@@ -51,7 +52,7 @@ class Virtual
   set: (@_set) -> @
 
 
-module.exports = class ModelBuilder
+module.exports = class ModelBuilder extends EventEmitter
 
   ###
   ###
@@ -107,6 +108,8 @@ module.exports = class ModelBuilder
 
   _initPropertyTransformation: (model, def) ->
     transformer = model.transform def.key
+
+    @emit "transformModelProperty", model, def
 
     if def.options.$multi
       @_initCollectionTransformation model, transformer, def
