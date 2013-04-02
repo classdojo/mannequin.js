@@ -41,7 +41,8 @@ module.exports = class
 
   reset: () ->
     m = @_transformers.model
-    m.set @key, @set m.get @key
+    if m.get @key
+      m.set @key, @set m.get @key
 
   ###
   ###
