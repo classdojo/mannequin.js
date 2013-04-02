@@ -40,7 +40,7 @@ class PropertyDefinition
     if testV and testV.source
       testV = testV.source()
 
-    if not testV and @options.$required
+    if (testV is undefined or testV is null) and @options.$required
         return callback new Error "\"#{@key}\" must be present"
 
 
