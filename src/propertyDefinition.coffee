@@ -147,7 +147,7 @@ class PropertyDefinition
   ###
 
   _default: () ->
-    return undefined if not @options.$default
+    return @options.$default if not @options.$default
     return @options.$default() if typeof @options.$default is "function"
     return @options.$default
 
