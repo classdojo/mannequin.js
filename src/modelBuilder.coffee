@@ -161,8 +161,8 @@ module.exports = class ModelBuilder extends EventEmitter
   ###
 
   getClass: () ->
-    if @_class
-      return @_class
+
+    return @_class if @_class
 
     clazz = @_class = () ->
       clazz.__super__.constructor.apply(this, arguments);
@@ -179,6 +179,12 @@ module.exports = class ModelBuilder extends EventEmitter
     @_class.prototype._virtual    = @_virtuals
     @_class.builder = @
     @_class
+
+  ###
+  ###
+
+  setClass: (@_class) ->
+    @
 
   ###
   ###
