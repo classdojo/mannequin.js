@@ -34,23 +34,25 @@ class PropertyDefinition
 
   test: (target, callback) ->
 
-    v = dref.get(target, @key) or @_default()
+    originalValue = dref.get(target, @key)
+    v = testV = originalValue or @_default()
 
-    if v and v.source
-      v = v.source()
+    if testV and testV.source
+      testV = testV.source()
 
-    if not v and @options.$required
+    if not testV and @options.$required
         return callback new Error "\"#{@key}\" must be present"
 
 
     async.forEach @_testers, ((tester, next) ->
-      tester v, next
+      tester testV, next
     ), (err) =>
 
       if err 
         return callback new Error @options.message or "\"#{@key}\" is invalid"
 
-      dref.set target, @key, v
+      if v isnt originalValue
+        dref.set target, @key, v
 
       callback()
 
