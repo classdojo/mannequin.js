@@ -56,6 +56,13 @@ class PropertyDefinition
 
       callback()
 
+  ###
+  ###
+
+  schemaRef: () -> 
+    return null if not @options.$ref
+    @schema.dictionary().getSchema(@options.$ref)
+
 
   ###
   ###
@@ -100,7 +107,7 @@ class PropertyDefinition
 
     if @options.$ref
       testers.push @_multi (item, next) =>
-        @schema.dictionary().getSchema(@options.$ref).test item, next
+        @schemaRef().test item, next
     else
     if @options.$type
       testers.push @_multi @_generateTypeTester()
