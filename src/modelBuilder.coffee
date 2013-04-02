@@ -7,6 +7,7 @@ bindable = require "bindable"
 outcome = require "outcome"
 EventEmitter = require("events").EventEmitter
 
+_modelClassId = 0
 
 class Virtual
 
@@ -129,10 +130,7 @@ module.exports = class ModelBuilder extends EventEmitter
         
         col.parent = model
 
-        col.transform().cast(refClass).map (item) ->
-          item.parent = col
-          item.definition = def
-          item
+        @_initCollectionItemTransformation col, def, refClass
 
         col.reset source
       )
@@ -143,12 +141,36 @@ module.exports = class ModelBuilder extends EventEmitter
   ###
   ###
 
+  _initCollectionItemTransformation: (col, def, refClass) ->
+    col.transform().map(@_castRefClass(refClass)).map (item) ->
+      item.parent = col
+      item.definition = def
+      item
+
+
+  ###
+  ###
+
   _initModelTransformation: (model, transformer, def) ->
     refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
-    transformer.cast(refClass).map((model) ->
+    transformer.map(@_castRefClass(refClass)).map((model) ->
       model.definition = def
       model
     )
+
+  ###
+  ###
+
+  _castRefClass: (refClass) =>
+    (item) ->
+      return if not item
+      return item if item.classId is refClass.prototype.classId
+
+      # fetch the data if it's a ref item
+      if item.classId
+        item = item.data
+
+      return new refClass item 
 
 
   ###
@@ -176,6 +198,7 @@ module.exports = class ModelBuilder extends EventEmitter
     @_class.prototype.dictionary  = @dictionary
     @_class.prototype._pre        = @_pre
     @_class.prototype._post       = @_post
+    @_class.prototype.classId     = ++_modelClassId
     @_class.prototype._virtual    = @_virtuals
     @_class.builder = @
     @_class
