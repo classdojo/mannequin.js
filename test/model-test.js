@@ -124,5 +124,20 @@ describe("models", function() {
 
   it("person schema has a definition", function() {
     expect(person.schema.getDefinition("name.first")).not.to.be(undefined);
-  })
+  });
+
+  it("person schema can be converted to JSON and not have properties that aren't defined in the schema", function() {
+    person.set("fish", "sauce")
+    expect(person.get("fish")).to.be("sauce");
+    var obj = JSON.parse(JSON.stringify(person));
+    expect(obj.fish).to.be(undefined);
+  });
+
+  it("person hobbies can be converted to JSON and not contain props not defined in schema", function() {
+    var hobby = person.get("hobbies").at(0);
+    hobby.set("fish", "cakes");
+    expect(hobby.get("fish")).to.be("cakes");
+    var obj = JSON.parse(JSON.stringify(person));
+    expect(obj.hobbies[0].fish).to.be(undefined);
+  });
 });

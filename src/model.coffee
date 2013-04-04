@@ -2,6 +2,7 @@ _ = require("underscore")
 bindable = require("bindable")
 Transformers = require("./transformers")
 isa = require "isa"
+dref = require "dref"
 
 module.exports = class Model extends bindable.Object
 
@@ -58,7 +59,18 @@ module.exports = class Model extends bindable.Object
   ###
 
   toJSON: () ->
-    
+    data = {}
+    for definition in @schema.definitions
+      v = @get definition.key
+      continue if v is undefined
+      dref.set data, definition.key, v
+
+    if @has "_id"
+      data._id = @get "_id"
+
+    data
+
+
 
 
   ###
