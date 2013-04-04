@@ -13,6 +13,7 @@ module.exports = class Schema
   ###
 
   constructor: (@definition, @options) ->
+    @_definitionsByKey = {}
     @build()
 
   ###
@@ -24,6 +25,16 @@ module.exports = class Schema
       definition.test target, next
     ), next
 
+
+  ###
+  ###
+
+  hasDefinition: () -> !!@_definitionsByKey[key]
+
+  ###
+  ###
+
+  getDefinition: (key) -> @_definitionsByKey[key]
 
   ###
   ###
@@ -66,6 +77,6 @@ module.exports = class Schema
 
     @definitions = []
     for key of flattenedDefinitions
-      @definitions.push new PropertyDefinition @, key, flattenedDefinitions[key]
+      @definitions.push @_definitionsByKey[key] = new PropertyDefinition @, key, flattenedDefinitions[key]
 
 

@@ -54,6 +54,12 @@ module.exports = class Model extends bindable.Object
 
     super key, @_transform key, value
 
+  ###
+  ###
+
+  toJSON: () ->
+    
+
 
   ###
   ###
