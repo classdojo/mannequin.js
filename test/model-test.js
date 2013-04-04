@@ -121,4 +121,8 @@ describe("models", function() {
   it("person can find a hobby model", function() {
     expect(person.model("hobby")).not.to.be(undefined);
   });
+
+  it("person schema has a definition", function() {
+    expect(person.schema.getDefinition("name.first")).not.to.be(undefined);
+  })
 });
