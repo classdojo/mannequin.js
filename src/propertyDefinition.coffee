@@ -35,7 +35,11 @@ class PropertyDefinition
   test: (target, callback) ->
 
     originalValue = dref.get(target, @key)
-    v = testV = originalValue or @_default()
+
+    v = testV = originalValue
+
+    if (testV is undefined or testV is null)
+      v = @_default()
 
     if testV and testV.source
       testV = testV.source()
