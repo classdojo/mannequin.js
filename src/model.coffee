@@ -61,18 +61,24 @@ module.exports = class Model extends bindable.Object
   ###
   ###
 
-  toJSON: () ->
-    data = {}
+  toJSON: () -> @_toJSON @
+
+  ###
+  ###
+
+  _toJSON: (data) ->
+    newData = {}
     for definition in @schema.definitions
-      v = @get definition.key
+      v = if data.__isBindable then data.get definition.key else dref.get @, definition.key
       continue if v is undefined
-      dref.set data, definition.key, v
+      dref.set newData, definition.key, v
 
-    if @has "_id"
-      data._id = @get "_id"
+    newData._id = @get "_id"
+    _id = if data.__isBindable then data.get definition.key else dref.get @, definition.key
+    if _id
+      newData._id = _id
 
-    data
-
+    newData
 
 
 
