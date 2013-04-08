@@ -1,14 +1,16 @@
 Transformer = require "./transformer"
-Bindable    = require "bindable"
+events      = require "eventemitter2"
 
 
-module.exports = class extends Bindable.EventEmitter
+module.exports = class extends events.EventEmitter2
 
   ###
   ###
 
   constructor: (@model) ->  
-    super()
+    super {
+      wildcard: true
+    }
 
   ###
   ###

@@ -123,20 +123,22 @@ module.exports = class ModelBuilder extends EventEmitter
   ###
 
   _initCollectionTransformation: (model, transformer, def) ->
-      refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
 
-      transformer.map((source) =>
-        col = @createCollection model, def
-        
-        col.parent = model
+    refClass = @dictionary.modelBuilder(def.options.$ref).getClass()
 
-        @_initCollectionItemTransformation col, def, refClass
+    transformer.map((source) =>
+      col = @createCollection model, def
+      
+      col.parent = model
 
-        col.reset source
-      )
+      @_initCollectionItemTransformation col, def, refClass
 
-      if not model.get(def.key)
-        model._set def.key, []
+      col.reset source
+      col
+    )
+
+    if not model.get(def.key)
+      model._set def.key, []
 
   ###
   ###
