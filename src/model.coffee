@@ -10,8 +10,11 @@ module.exports = class Model extends bindable.Object
   ###
 
   constructor: (data = {}, options = {}) ->
-    super data
+    super {}
     _.extend @, options
+
+    # data might have a virtual property
+    @set data
 
     @init()
 
