@@ -36,7 +36,7 @@ class PropertyDefinition
 
     originalValue = dref.get(target, @key)
 
-    v = testV = originalValue ? @_default()
+    v = testV = originalValue ? @_default target
 
     if testV and testV.source
       testV = testV.source()
@@ -147,9 +147,9 @@ class PropertyDefinition
   ###
   ###
 
-  _default: () ->
+  _default: (target) ->
     return @options.$default if not @options.$default
-    return @options.$default() if typeof @options.$default is "function"
+    return @options.$default.call(target) if typeof @options.$default is "function"
     return @options.$default
 
 
