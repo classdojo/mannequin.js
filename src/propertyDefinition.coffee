@@ -41,7 +41,7 @@ class PropertyDefinition
     if testV and testV.source
       testV = testV.source()
 
-    if (testV is undefined or testV is null) and @options.$required
+    if (testV is undefined or testV is null) or (typeof testV is "string" and not testV.length) and @options.$required
         return callback new Error "\"#{@key}\" must be present"
 
 
@@ -124,9 +124,6 @@ class PropertyDefinition
     return @options.$test if @options.$test
 
     tester = verify.tester().is(@options.$type)
-
-    if @options.$type is "string"
-      tester.len(1)
 
     # checks for stuff like { $type: "string", $is: /regexp/ }
     for key of @options
