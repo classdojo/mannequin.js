@@ -4,6 +4,7 @@ module.exports = {
     first: "Craig",
     last: "Condon"
   },
+  color: "blue",
   email: "craig.j.condon@gmail.com",
   location: {
     _id: "sf",

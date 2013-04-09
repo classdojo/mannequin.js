@@ -40,6 +40,15 @@ describe("models", function() {
     person.validate(next);
   });
 
+  it("cannot set the person color to be blank and be valid", function(next) {
+    person.set("color", "");
+    person.validate(function(err) {
+      person.set("color", "blue");
+      expect(err).not.to.be(null);
+      next();
+    })
+  });
+
   it("location is type casted as a location model", function() {
     expect(person.get("location").builder.name).to.be("location");
   });

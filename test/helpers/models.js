@@ -20,6 +20,10 @@ var personSchema = new Schema({
     first: "string",
     last: "string"
   },
+  color: {
+    $type: "string",
+    $required: true
+  },
   email: { 
     $type: "email",
     $required: true

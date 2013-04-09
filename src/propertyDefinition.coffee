@@ -36,10 +36,7 @@ class PropertyDefinition
 
     originalValue = dref.get(target, @key)
 
-    v = testV = originalValue
-
-    if (testV is undefined or testV is null)
-      v = @_default()
+    v = testV = originalValue ? @_default()
 
     if testV and testV.source
       testV = testV.source()
@@ -127,6 +124,9 @@ class PropertyDefinition
     return @options.$test if @options.$test
 
     tester = verify.tester().is(@options.$type)
+
+    if @options.$type is "string"
+      tester.len(1)
 
     # checks for stuff like { $type: "string", $is: /regexp/ }
     for key of @options
