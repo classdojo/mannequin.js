@@ -34,6 +34,8 @@ class PropertyDefinition
 
   test: (target, callback) ->
 
+    return callback() if @options.$validate is false
+
     originalValue = dref.get(target, @key)
 
     v = testV = originalValue ? @_default target
