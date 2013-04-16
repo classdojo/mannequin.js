@@ -47,7 +47,7 @@ exports.PersonModel.builder.virtual("fullName").get(function() {
   var nameParts = value.split(" ");
   this.set("name.first", nameParts[0]);
   this.set("name.last", nameParts[1]);
-});
+}).bind("name.first", "name.last", "name")
 
 
 exports.HobbyModel.builder.virtual("test").get(function() {

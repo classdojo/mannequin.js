@@ -19,13 +19,15 @@ class Virtual
   ###
   ###
 
-  constructor: (key) ->  
+  constructor: (@key) ->  
 
     @get () -> 
       @[key]
 
     @set (value) ->
       @[key] = value
+
+    @_bindings = []
 
   
   ###
@@ -40,6 +42,15 @@ class Virtual
 
     @
 
+  ###
+  ###
+
+  setupBindings: (context) ->
+    self = @
+    for binding in @_bindings then do =>
+      context.bind binding, (value) ->
+        context.emit "change:#{self.key}", value
+
 
   ###
   ###
@@ -51,6 +62,12 @@ class Virtual
   ###
 
   set: (@_set) -> @
+
+
+  ###
+  ###
+
+  bind: (@_bindings...) -> 
 
 
 module.exports = class ModelBuilder extends EventEmitter
@@ -102,6 +119,7 @@ module.exports = class ModelBuilder extends EventEmitter
 
   initModel: (model) ->
     @_initPropertyTransformation model, def for def in @schema.refs()
+
 
 
   ###
@@ -159,6 +177,8 @@ module.exports = class ModelBuilder extends EventEmitter
       model.definition = def
       model
     )
+    for virtual of @_virtuals
+      @_virtuals[virtual].setupBindings model
 
   
   ###

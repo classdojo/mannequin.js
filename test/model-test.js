@@ -103,6 +103,18 @@ describe("models", function() {
     expect(person.get("name.last")).to.be("Frank");
   });
 
+  it("can bind to the virtual name", function() {
+    var fullName;
+    var binding = person.bind("fullName").to(function(name) {
+      fullName = name;
+    });
+
+    person.set("name.last", "Awesome");
+    binding.dispose()
+
+    expect(fullName).to.be("Chris Awesome");
+  })
+
   it("sub model has a virtual method", function() {
     expect(person.get("hobbies").at(0).get("test")).to.be("blah")
   });
