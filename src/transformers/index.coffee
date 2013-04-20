@@ -1,16 +1,14 @@
 Transformer = require "./transformer"
-events      = require "eventemitter2"
 
 
-module.exports = class extends events.EventEmitter2
+
+module.exports = class
 
   ###
   ###
 
   constructor: (@model) ->  
-    super {
-      wildcard: true
-    }
+    @_transformers = {}
 
   ###
   ###
@@ -18,27 +16,42 @@ module.exports = class extends events.EventEmitter2
 
   set: (key, value) ->
     target = { key: key, currentValue: value }
-    n = @emit key, target
+
+    for transformer in @_findTransformers(key, false)
+      transformer(target)
+
     target.currentValue
 
 
   ###
   ###
 
+  _findTransformers: (key, create = true) ->
+    keyParts = key.split(".")
+    endKey = keyParts[keyParts.length - 1]
+
+    for part in keyParts
+      if not @_transformers[part]
+        return [] if not create
+
+      @_transformers[part] = @_transformers[part] or {}
+
+    if not @_transformers[endKey]._items
+      @_transformers[endKey]._items = []
+
+    @_transformers[endKey]._items or []
+
+
   use: (key) -> 
 
-    if not key
-      event = "**"
-    else
-      keyParts = key.split(".")
-
-      # start from the ROOT property
-      event = "#{keyParts.shift()}.**"
 
     transformer = new Transformer @, key
 
 
-    @on event, (target) => 
+      
+
+
+    @_findTransformers(key, true).push (target) =>
       return if target.key isnt key
       if not key or (@model.get(key) isnt target.currentValue)
         target.currentValue = transformer.set target.currentValue
