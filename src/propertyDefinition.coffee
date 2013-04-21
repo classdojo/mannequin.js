@@ -3,7 +3,7 @@ utils  = require "./utils"
 verify = require("verify")()
 async  = require "async"
 toarray = require "toarray"
-isa  = require "isa"
+type   = require "type-component"
 
 ###
 ###
@@ -77,7 +77,7 @@ class PropertyDefinition
       return {
         $type: definition
       }
-    else if isa.array definition
+    else if type(definition) is "array"
       def = @_fixDefnition definition[0]
       def.$multi = true
       def.$default = () -> []

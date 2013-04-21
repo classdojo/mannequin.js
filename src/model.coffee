@@ -1,7 +1,6 @@
-_ = require("underscore")
-bindable = require("bindable")
-Transformers = require("./transformers")
-isa = require "isa"
+_ = require "underscore"
+bindable = require "bindable"
+Transformers = require "./transformers"
 dref = require "dref"
 
 module.exports = class Model extends bindable.Object

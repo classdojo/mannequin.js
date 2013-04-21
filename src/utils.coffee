@@ -1,4 +1,4 @@
-
+type = require "type-component"
 
 _flatten = (target, path, context) ->
 
@@ -17,11 +17,11 @@ _flatten = (target, path, context) ->
       continue
 
     # is it an array? the type must be an array
-    else if v instanceof Array
+    else if type(v) is "array"
       context[kk] = v
 
     # is it an object
-    else if typeof v is "object"
+    else if type(v) is "object"
 
       # if the value a schema, then the type is a schema
       if exports.isSchema v
