@@ -4,7 +4,7 @@
   "description": "mannequin.js ============",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha . --reporter min"
+    "test": "mocha ./test --reporter min; karma start"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   "devDependencies": {
     "mocha": "1.8.x",
     "expect.js": "0.2.x",
-    "structr": "0.2.x"
+    "structr": "0.2.x",
+    "sardines": "0.4.x"
   }
 }
