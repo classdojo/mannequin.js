@@ -1,6 +1,6 @@
 {
   "name": "mannequin",
-  "version": "0.1.30",
+  "version": "0.1.31",
   "description": "mannequin.js ============",
   "main": "./lib/index.js",
   "scripts": {
@@ -24,7 +24,9 @@
     "bindable": "0.2.x",
     "hoist": "0.0.x",
     "eventemitter2": "0.4.x",
-    "type-component": "0.0.x"
+    "type-component": "0.0.x",
+    "sardines": "0.4.x",
+    "stepc": "0.0.x"
   },
   "devDependencies": {
     "mocha": "1.8.x",
